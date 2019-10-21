@@ -71,6 +71,7 @@ namespace GamepadControler
                     iks = joystick.GetCurrentState().X;
                     ygrek = joystick.GetCurrentState().Y;
                     zet = joystick.GetCurrentState().Z;
+                    System.Console.WriteLine("Stan joysticka: (" + iks + "," + ygrek + ")");
                     if (obecny_iks != iks || obecny_ygrek != ygrek)
                         System.Console.WriteLine("Stan joysticka: (" + iks + "," + ygrek + ")");
                     //KONIEC WYKRYCIA ZMIANY POLOZENIA////
@@ -107,12 +108,16 @@ namespace GamepadControler
                 SharpDX.DirectInput.DirectInput directInput = new SharpDX.DirectInput.DirectInput();
                 bool isRightPressed = false;
                 System.Console.WriteLine("Want exit? Press button 9 !");
+                int mouseX = 32767;
+                int mouseY = 32767;
+                int padX = 0;
+                int padY = 0;
                 while (true)
                 {
                     if (!gamepad.GetCurrentState().Buttons[8])
                     {
-                        int mouseX = gamepad.GetCurrentState().X;
-                        int mouseY = gamepad.GetCurrentState().Y;
+                        padX = gamepad.GetCurrentState().X;
+                        padY = gamepad.GetCurrentState().Y;
                         uint flags = (uint)(MouseEventFlags.ABSOLUTE | MouseEventFlags.MOVE);
                         bool ppm = gamepad.GetCurrentState().Buttons[1];
                         if (gamepad.GetCurrentState().Buttons[0])
@@ -135,7 +140,7 @@ namespace GamepadControler
                                 isRightPressed = false;
                             }
                         }
-                        mouse_event(flags, (uint)mouseX, (uint)mouseY, 0, 0);
+                        mouse_event(flags, (uint)padX, (uint)padY, 0, 0);
                     }
                     else
                     {
