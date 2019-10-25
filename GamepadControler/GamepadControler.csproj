@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BF278190-FB83-4FD9-8FF6-5BC88720BD65}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>GamepadControler</RootNamespace>
     <AssemblyName>GamepadControler</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>

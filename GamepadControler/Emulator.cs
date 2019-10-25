@@ -101,6 +101,8 @@ namespace GamepadControler
             }
             return true;
         }
+        private float spowolnienie = 1;
+        private float posX = 0, posY = 0;
         public bool Emulate(Joystick gamepad)
         {
             try
@@ -108,16 +110,21 @@ namespace GamepadControler
                 SharpDX.DirectInput.DirectInput directInput = new SharpDX.DirectInput.DirectInput();
                 bool isRightPressed = false;
                 System.Console.WriteLine("Want exit? Press button 9 !");
-                int mouseX = 32767;
-                int mouseY = 32767;
-                int padX = 0;
-                int padY = 0;
                 while (true)
                 {
                     if (!gamepad.GetCurrentState().Buttons[8])
                     {
-                        padX = gamepad.GetCurrentState().X;
-                        padY = gamepad.GetCurrentState().Y;
+                        int przesuniecie = (1 << 15) - 1;
+                        int x = gamepad.GetCurrentState().X - przesuniecie;
+                        int y = gamepad.GetCurrentState().Y - przesuniecie;
+
+                        float xKorekta = (float)x / przesuniecie;
+                        float yKorekta = (float)y / przesuniecie;
+
+                        int slider = gamepad.GetCurrentState().Z;
+                        spowolnienie = 150 / ((1 << 16) - 1) + 1;
+                        posX += xKorekta * spowolnienie*2;
+                        posY += yKorekta * spowolnienie*2;
                         uint flags = (uint)(MouseEventFlags.ABSOLUTE | MouseEventFlags.MOVE);
                         bool ppm = gamepad.GetCurrentState().Buttons[1];
                         if (gamepad.GetCurrentState().Buttons[0])
@@ -139,15 +146,15 @@ namespace GamepadControler
                                 flags |= (uint)MouseEventFlags.RIGHTUP;
                                 isRightPressed = false;
                             }
-                        }
-                        mouse_event(flags, (uint)padX, (uint)padY, 0, 0);
+                        }               
+                        mouse_event(flags, (uint)posX, (uint)posY, 0, 0);
                     }
                     else
                     {
                         return false;
                     }
                 }
-                
+
             }
             catch (ArgumentOutOfRangeException e)
             {
